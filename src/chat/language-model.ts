@@ -221,13 +221,13 @@ export class SarvamChatLanguageModel implements LanguageModelV3 {
 						type: "text",
 						text: toolCall.function.arguments,
 					});
-
-				content.push({
-					type: "tool-call",
-					toolCallId: toolCall.id ?? (this.config.generateId ?? generateId)(),
-					toolName: toolCall.function.name,
-					input: toolCall.function.arguments,
-				});
+				else
+					content.push({
+						type: "tool-call",
+						toolCallId: toolCall.id ?? (this.config.generateId ?? generateId)(),
+						toolName: toolCall.function.name,
+						input: toolCall.function.arguments,
+					});
 			}
 		}
 
