@@ -65,8 +65,7 @@ export class SarvamTranslationModel implements LanguageModelV3 {
 
 		if (!sarvamOptions) throw new Error("Translation Settings is not provided");
 
-		const from = sarvamOptions.from ?? "auto";
-		const to = sarvamOptions.to;
+		const { from = "auto", to, ...restOptions } = sarvamOptions;
 
 		if (from === to) {
 			throw new Error("Source and target languages code must be different.");
@@ -87,7 +86,7 @@ export class SarvamTranslationModel implements LanguageModelV3 {
 			args: {
 				input: convertPromptToInput(prompt),
 				model: this.modelId,
-				...sarvamOptions,
+				...restOptions,
 				source_language_code: from,
 				target_language_code: to,
 			},

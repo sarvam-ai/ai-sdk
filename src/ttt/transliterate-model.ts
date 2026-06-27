@@ -61,8 +61,7 @@ export class SarvamTransliterateModel implements LanguageModelV3 {
 		if (!sarvamOptions)
 			throw new Error("Transliterate Settings is not provided");
 
-		const from = sarvamOptions.from ?? "auto";
-		const to = sarvamOptions.to;
+		const { from = "auto", to, ...restOptions } = sarvamOptions;
 
 		if (from !== "auto") {
 			if (to !== "en-IN" && from !== "en-IN")
@@ -75,7 +74,7 @@ export class SarvamTransliterateModel implements LanguageModelV3 {
 		return {
 			args: {
 				input: convertPromptToInput(prompt),
-				...sarvamOptions,
+				...restOptions,
 				source_language_code: from,
 				target_language_code: to,
 				spoken_form_numerals_language: sarvamOptions.spoken_form
