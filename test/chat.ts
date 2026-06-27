@@ -26,10 +26,10 @@ console.log({ text: text2 });
 // ============================================================================
 // 3. GENERATE TEXT - WITH MAX TOKENS
 // ============================================================================
-console.log("\n=== Test 3: generateText with maxTokens ===");
+console.log("\n=== Test 3: generateText with maxOutputTokens ===");
 const { text: text3 } = await generateText({
 	model: sarvam("sarvam-30b"),
-	maxTokens: 100,
+	maxOutputTokens: 100,
 	prompt: "Explain quantum computing in simple terms",
 });
 console.log({ text: text3 });
@@ -162,7 +162,6 @@ console.log("\n=== Test 14: generateText with JSON response format ===");
 const { text: text14 } = await generateText({
 	model: sarvam("sarvam-30b"),
 	prompt: 'Return your response as JSON with keys "name" and "age".',
-	responseFormat: { type: "json" },
 });
 console.log({ text: text14 });
 
@@ -196,7 +195,7 @@ const { text: text17 } = await generateText({
 		wiki_grounding: true,
 	}),
 	temperature: 0.7,
-	maxTokens: 200,
+	maxOutputTokens: 200,
 	topP: 0.95,
 	system: "You are an expert educator.",
 	prompt: "Explain photosynthesis in detail",
@@ -225,7 +224,7 @@ const { textStream: textStream19, toolResults: toolResults19 } = streamText({
 	tools: {
 		weather: tool({
 			description: "Get the weather in a location",
-			parameters: z.object({
+			inputSchema: z.object({
 				location: z.string().describe("The location to get the weather for"),
 			}),
 			execute: async ({ location }) => ({
@@ -236,7 +235,7 @@ const { textStream: textStream19, toolResults: toolResults19 } = streamText({
 		}),
 		calculator: tool({
 			description: "Perform mathematical calculations",
-			parameters: z.object({
+			inputSchema: z.object({
 				expression: z.string().describe("Mathematical expression to evaluate"),
 			}),
 			execute: async ({ expression }) => ({
@@ -255,11 +254,11 @@ for await (const textPart of textStream19) {
 }
 
 console.log("\n--- Tool Results ---");
-for await (const result of toolResults19) {
+for await (const result of await toolResults19) {
 	console.log("Tool Call ID:", result.toolCallId);
 	console.log("Tool Name:", result.toolName);
-	console.log("Tool Args:", result.args);
-	console.log("Tool Result:", result.result);
+	console.log("Tool Args:", result.input);
+	console.log("Tool Result:", result.output);
 	console.log("---");
 }
 
@@ -272,7 +271,7 @@ const { text: text19b, toolCalls } = await generateText({
 	tools: {
 		weather: tool({
 			description: "Get the weather in a location",
-			parameters: z.object({
+			inputSchema: z.object({
 				location: z.string().describe("The location to get the weather for"),
 			}),
 			execute: async ({ location }) => ({
@@ -283,7 +282,7 @@ const { text: text19b, toolCalls } = await generateText({
 		}),
 		calculator: tool({
 			description: "Perform mathematical calculations",
-			parameters: z.object({
+			inputSchema: z.object({
 				expression: z.string().describe("Mathematical expression to evaluate"),
 			}),
 			execute: async ({ expression }) => ({
@@ -304,7 +303,7 @@ if (toolCalls && toolCalls.length > 0) {
 	for (const toolCall of toolCalls) {
 		console.log("Tool Call ID:", toolCall.toolCallId);
 		console.log("Tool Name:", toolCall.toolName);
-		console.log("Tool Arguments:", toolCall.args);
+		console.log("Tool Arguments:", toolCall.input);
 		console.log("---");
 	}
 } else {
@@ -358,7 +357,7 @@ console.log("\n=== Test 22: streamText with all parameters ===");
 const { textStream: textStream22 } = streamText({
 	model: sarvam("sarvam-30b", { reasoning_effort: "high" }),
 	temperature: 0.8,
-	maxTokens: 150,
+	maxOutputTokens: 150,
 	topP: 0.9,
 	frequencyPenalty: 0.4,
 	presencePenalty: 0.2,
