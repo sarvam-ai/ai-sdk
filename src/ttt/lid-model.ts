@@ -66,7 +66,7 @@ export class SarvamLidModel implements LanguageModelV4 {
 				path: "/text-lid",
 				modelId: this.modelId,
 			}),
-			headers: combineHeaders(this.config.headers(), options.headers),
+			headers: combineHeaders(this.config.headers?.(), options.headers),
 			body: args,
 			failedResponseHandler: sarvamFailedResponseHandler,
 			successfulResponseHandler: createJsonResponseHandler(

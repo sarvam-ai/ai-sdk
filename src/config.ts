@@ -4,7 +4,7 @@ import { z } from "zod";
 export type SarvamConfig = {
 	provider: string;
 	url: (options: { modelId: string; path: string }) => string;
-	headers: () => Record<string, string | undefined>;
+	headers?: () => Record<string, string | undefined>;
 	fetch?: FetchFunction;
 	generateId?: () => string;
 };

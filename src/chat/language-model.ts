@@ -180,7 +180,7 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 				path: "/chat/completions",
 				modelId: this.modelId,
 			}),
-			headers: combineHeaders(this.config.headers(), options.headers),
+			headers: combineHeaders(this.config.headers?.(), options.headers),
 			body: args,
 			failedResponseHandler: sarvamFailedResponseHandler,
 			successfulResponseHandler: createJsonResponseHandler(chatResponseSchema),
@@ -282,7 +282,7 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 				path: "/chat/completions",
 				modelId: this.modelId,
 			}),
-			headers: combineHeaders(this.config.headers(), options.headers),
+			headers: combineHeaders(this.config.headers?.(), options.headers),
 			body: {
 				...args,
 				stream: true,

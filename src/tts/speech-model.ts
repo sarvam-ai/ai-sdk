@@ -108,7 +108,7 @@ export class SarvamSpeechModel implements SpeechModelV4 {
 				path: "/text-to-speech",
 				modelId: this.modelId,
 			}),
-			headers: combineHeaders(this.config.headers(), options.headers),
+			headers: combineHeaders(this.config.headers?.(), options.headers),
 			body: requestBody,
 			failedResponseHandler: sarvamFailedResponseHandler,
 			successfulResponseHandler:

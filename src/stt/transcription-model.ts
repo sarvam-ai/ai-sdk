@@ -120,7 +120,7 @@ export class SarvamTranscriptionModel implements TranscriptionModelV4 {
 				path: "/speech-to-text",
 				modelId: this.modelId,
 			}),
-			headers: combineHeaders(this.config.headers(), options.headers),
+			headers: combineHeaders(this.config.headers?.(), options.headers),
 			formData,
 			failedResponseHandler: sarvamFailedResponseHandler,
 			successfulResponseHandler: createJsonResponseHandler(
