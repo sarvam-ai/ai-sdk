@@ -8,7 +8,7 @@ import {
 	parseProviderOptions,
 	postFormDataToApi,
 } from "@ai-sdk/provider-utils";
-import z from "zod";
+import { z } from "zod";
 import {
 	type MoreSarvamLanguageCode,
 	MoreSarvamLanguageCodeSchema,
