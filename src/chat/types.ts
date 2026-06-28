@@ -13,8 +13,10 @@ export interface SarvamSystemMessage {
 
 export interface SarvamUserMessage {
 	role: "user";
-	content: string | Array<SarvamContentPart>;
+	content: string; // | Array<SarvamContentPart>;
 }
+
+// Sarvam Chat Models doesn't support file inputs
 
 export type SarvamContentPart = SarvamContentPartText | SarvamContentPartImage;
 

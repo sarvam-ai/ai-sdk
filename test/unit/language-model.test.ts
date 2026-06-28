@@ -1,5 +1,6 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
+import { convertReadableStreamToArray } from "@ai-sdk/provider-utils/test";
 import { createSarvam } from "@/provider";
 
 function eventStream(chunks: unknown[]) {
@@ -85,10 +86,7 @@ test("doStream brackets streamed tool call input", async () => {
 		],
 	});
 
-	const parts = [];
-	for await (const part of result.stream) {
-		parts.push(part);
-	}
+	const parts = await convertReadableStreamToArray(result.stream);
 
 	assert.deepEqual(
 		parts.filter((part) => part.type.startsWith("tool")),

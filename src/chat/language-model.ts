@@ -1,11 +1,11 @@
 import {
 	InvalidResponseDataError,
-	type LanguageModelV3,
-	type LanguageModelV3CallOptions,
-	type LanguageModelV3Content,
-	type LanguageModelV3FinishReason,
-	type LanguageModelV3StreamPart,
-	type SharedV3Warning,
+	type LanguageModelV4,
+	type LanguageModelV4CallOptions,
+	type LanguageModelV4Content,
+	type LanguageModelV4FinishReason,
+	type LanguageModelV4StreamPart,
+	type SharedV4Warning,
 } from "@ai-sdk/provider";
 import {
 	combineHeaders,
@@ -31,8 +31,8 @@ import {
 } from "./settings";
 import { getResponseMetadata, mapFinishReason } from "./utils";
 
-export class SarvamChatLanguageModel implements LanguageModelV3 {
-	readonly specificationVersion = "v3";
+export class SarvamChatLanguageModel implements LanguageModelV4 {
+	readonly specificationVersion = "v4";
 
 	readonly modelId: ChatModelId;
 	readonly settings: ChatSettings;
@@ -59,7 +59,7 @@ export class SarvamChatLanguageModel implements LanguageModelV3 {
 	}
 
 	private async getArgs(
-		options: LanguageModelV3CallOptions & {
+		options: LanguageModelV4CallOptions & {
 			stream: boolean;
 		},
 	) {
@@ -80,7 +80,7 @@ export class SarvamChatLanguageModel implements LanguageModelV3 {
 			stream,
 		} = options;
 
-		const warnings: SharedV3Warning[] = [];
+		const warnings: SharedV4Warning[] = [];
 
 		if (topK) {
 			warnings.push({
@@ -162,8 +162,8 @@ export class SarvamChatLanguageModel implements LanguageModelV3 {
 	}
 
 	async doGenerate(
-		options: LanguageModelV3CallOptions,
-	): Promise<Awaited<ReturnType<LanguageModelV3["doGenerate"]>>> {
+		options: LanguageModelV4CallOptions,
+	): Promise<Awaited<ReturnType<LanguageModelV4["doGenerate"]>>> {
 		const { args, warnings } = await this.getArgs({
 			...options,
 			stream: false,
@@ -197,7 +197,7 @@ export class SarvamChatLanguageModel implements LanguageModelV3 {
 			});
 		}
 
-		const content: LanguageModelV3Content[] = [];
+		const content: LanguageModelV4Content[] = [];
 
 		if (choice.message.content) {
 			content.push({
@@ -273,8 +273,8 @@ export class SarvamChatLanguageModel implements LanguageModelV3 {
 	}
 
 	async doStream(
-		options: LanguageModelV3CallOptions,
-	): Promise<Awaited<ReturnType<LanguageModelV3["doStream"]>>> {
+		options: LanguageModelV4CallOptions,
+	): Promise<Awaited<ReturnType<LanguageModelV4["doStream"]>>> {
 		const { args } = await this.getArgs({ ...options, stream: true });
 
 		const { responseHeaders, value: response } = await postJsonToApi({
@@ -301,7 +301,7 @@ export class SarvamChatLanguageModel implements LanguageModelV3 {
 			hasFinished: boolean;
 		}> = [];
 
-		let finishReason: LanguageModelV3FinishReason = {
+		let finishReason: LanguageModelV4FinishReason = {
 			unified: "other",
 			raw: undefined,
 		};
@@ -336,7 +336,7 @@ export class SarvamChatLanguageModel implements LanguageModelV3 {
 			stream: response.pipeThrough(
 				new TransformStream<
 					ParseResult<z.infer<typeof chatChunkSchema>>,
-					LanguageModelV3StreamPart
+					LanguageModelV4StreamPart
 				>({
 					transform(chunk, controller) {
 						// handle failed chunk parsing / validation:

@@ -1,7 +1,7 @@
 import type {
-	LanguageModelV3,
-	SpeechModelV3,
-	TranscriptionModelV3,
+	LanguageModelV4,
+	SpeechModelV4,
+	TranscriptionModelV4,
 } from "@ai-sdk/provider";
 
 import type { ChatModelId, ChatSettings } from "./chat/settings";
@@ -26,7 +26,7 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV3;
+	(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV4;
 
 	/**
 	 * Creates an Sarvam chat model for text generation.
@@ -37,7 +37,7 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	languageModel(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV3;
+	languageModel(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV4;
 
 	/**
 	 * Creates a Sarvam model for chat.
@@ -48,14 +48,14 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	chat(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV3;
+	chat(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV4;
 
 	/**
 	 * Creates a Sarvam model for transcription.
 	 *
 	 * @example
 	 * 	const { text } = await transcribe({
-	 *		model: sarvam.transcription("saaras:v3"),
+	 *		model: sarvam.transcription("saaras:v4"),
 	 *		audio: await readFile("./audio.wav"),
 	 * 	});
 	 */
@@ -69,13 +69,13 @@ export type SarvamProvider = {
 		 */
 		languageCode?: SarvamLanguageCode | MoreSarvamLanguageCode | "unknown",
 		settings?: TranscriptionSettings<T>,
-	): TranscriptionModelV3;
+	): TranscriptionModelV4;
 
 	/**
 	 * Creates a Sarvam model for speech.
 	 * @example
 	 *	const { audio } = await generateSpeech({
-	 *		model: sarvam.speech("bulbul:v3", "ml-IN"),
+	 *		model: sarvam.speech("bulbul:v4", "ml-IN"),
 	 *		text: "പാചകം തുടരൂ, സുഹൃത്തുക്കളേ",
 	 * 	});
 	 *
@@ -85,7 +85,7 @@ export type SarvamProvider = {
 		modelId: T,
 		languageCode: SarvamLanguageCode,
 		settings?: SpeechSettings<T>,
-	): SpeechModelV3;
+	): SpeechModelV4;
 
 	/**
 	 * Creates an Sarvam model for transliterate.
@@ -101,7 +101,7 @@ export type SarvamProvider = {
 	 */
 	transliterate<T extends SarvamLanguageCode>(
 		settings: TransliterateSettings<false, T>,
-	): LanguageModelV3;
+	): LanguageModelV4;
 
 	/**
 	 * Creates an Sarvam model for translation.
@@ -118,7 +118,7 @@ export type SarvamProvider = {
 	translation<T extends TranslationModelId>(
 		model: T,
 		settings: TranslationSettings<T>,
-	): LanguageModelV3;
+	): LanguageModelV4;
 
 	/**
 	 * Creates an Sarvam model for language identification.
@@ -129,5 +129,5 @@ export type SarvamProvider = {
 	 *		prompt: "ബുദ്ധിയാണ് സാറേ ഇവൻ്റെ മെയിൻ",
 	 *	});
 	 */
-	languageIdentification(): LanguageModelV3;
+	languageIdentification(): LanguageModelV4;
 };

@@ -1,6 +1,6 @@
 import type {
-	TranscriptionModelV3,
-	TranscriptionModelV3CallOptions,
+	TranscriptionModelV4,
+	TranscriptionModelV4CallOptions,
 } from "@ai-sdk/provider";
 import {
 	combineHeaders,
@@ -32,8 +32,8 @@ interface TranscriptionModelConfig extends SarvamConfig {
 	transcription?: TranscriptionSettings;
 }
 
-export class SarvamTranscriptionModel implements TranscriptionModelV3 {
-	readonly specificationVersion = "v3";
+export class SarvamTranscriptionModel implements TranscriptionModelV4 {
+	readonly specificationVersion = "v4";
 
 	constructor(
 		readonly modelId: TranscriptionModelId,
@@ -53,7 +53,7 @@ export class SarvamTranscriptionModel implements TranscriptionModelV3 {
 	}
 
 	private async getArgs(
-		options: TranscriptionModelV3CallOptions & { stream: boolean },
+		options: TranscriptionModelV4CallOptions & { stream: boolean },
 	) {
 		const { audio, mediaType, providerOptions } = options;
 
@@ -103,8 +103,8 @@ export class SarvamTranscriptionModel implements TranscriptionModelV3 {
 	}
 
 	async doGenerate(
-		options: TranscriptionModelV3CallOptions,
-	): Promise<Awaited<ReturnType<TranscriptionModelV3["doGenerate"]>>> {
+		options: TranscriptionModelV4CallOptions,
+	): Promise<Awaited<ReturnType<TranscriptionModelV4["doGenerate"]>>> {
 		const currentDate = this.config._internal?.currentDate?.() ?? new Date();
 		const { formData, warnings } = await this.getArgs({
 			...options,

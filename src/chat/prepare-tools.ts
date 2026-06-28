@@ -1,8 +1,8 @@
 import {
-	type LanguageModelV3FunctionTool,
-	type LanguageModelV3ProviderTool,
-	type LanguageModelV3ToolChoice,
-	type SharedV3Warning,
+	type LanguageModelV4FunctionTool,
+	type LanguageModelV4ProviderTool,
+	type LanguageModelV4ToolChoice,
+	type SharedV4Warning,
 	UnsupportedFunctionalityError,
 } from "@ai-sdk/provider";
 
@@ -19,8 +19,8 @@ export function prepareTools({
 	tools,
 	toolChoice,
 }: {
-	tools?: Array<LanguageModelV3FunctionTool | LanguageModelV3ProviderTool>;
-	toolChoice?: LanguageModelV3ToolChoice;
+	tools?: Array<LanguageModelV4FunctionTool | LanguageModelV4ProviderTool>;
+	toolChoice?: LanguageModelV4ToolChoice;
 }): {
 	tools: SarvamTools | undefined;
 	tool_choice:
@@ -29,11 +29,11 @@ export function prepareTools({
 		| "none"
 		| "required"
 		| undefined;
-	toolWarnings: SharedV3Warning[];
+	toolWarnings: SharedV4Warning[];
 } {
 	// when the tools array is empty, change it to undefined to prevent errors:
 	const finalTools = tools?.length ? tools : undefined;
-	const toolWarnings: SharedV3Warning[] = [];
+	const toolWarnings: SharedV4Warning[] = [];
 
 	if (finalTools == null) {
 		return { tools: undefined, tool_choice: undefined, toolWarnings };

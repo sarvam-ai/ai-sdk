@@ -4,7 +4,7 @@
 
 # AI SDK - Sarvam Provider
 
-The **[Sarvam provider](https://v6.ai-sdk.dev/providers/community-providers/sarvam)** for the [AI SDK](https://v6.ai-sdk.dev/docs)
+The **[Sarvam provider](https://v7.ai-sdk.dev/providers/community-providers/sarvam)** for the [AI SDK](https://v7.ai-sdk.dev/docs)
 contains language model support for the Sarvam chat completion, Text-to-Speech and Speech-to-Text APIs.
 
 ## Setup
@@ -12,18 +12,19 @@ contains language model support for the Sarvam chat completion, Text-to-Speech a
 The **[Sarvam](http://sarvam.ai)** provider is available in the `sarvam-ai-sdk` module. You can install it with
 
 ```bash
-npm i sarvam-ai-sdk ai@6
+npm i sarvam-ai-sdk ai@7
 ```
 
 > [!WARNING]
-> This package only works with Vercel AI-SDK v6, not v7. Make sure to install `ai@6` in your project.
+> This package only works with Vercel AI-SDK v7, not v8. Make sure to install `ai@7` in your project.
 
 ### Version Compatibility
 
 | Sarvam AI SDK Version | Vercel AI SDK Version |
 |-----------------------|-----------------------|
-| 0.4.x (beta)			| 7.x.x (beta)			|
-| 0.3.x (current)		| 6.x.x (current)		|
+| 0.5.x (beta)			| 8.x.x (beta)			|
+| 0.4.x (current)		| 7.x.x (current)		|
+| 0.3.x 				| 6.x.x 				|
 | 0.2.x					| 5.x.x					|
 | 0.1.x					| 4.x.x					|
 
@@ -247,4 +248,4 @@ sarvam.transcription("saaras:v3");
 
 ## Documentation
 
-Please check out the **[Sarvam provider documentation](https://v6.ai-sdk.dev/providers/community-providers/sarvam)** and **[Sarvam API documentation](https://docs.sarvam.ai)** for more information.
+Please check out the **[Sarvam provider documentation](https://v7.ai-sdk.dev/providers/community-providers/sarvam)** and **[Sarvam API documentation](https://docs.sarvam.ai)** for more information.

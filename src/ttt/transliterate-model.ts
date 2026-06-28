@@ -1,7 +1,7 @@
 import type {
-	LanguageModelV3,
-	LanguageModelV3CallOptions,
-	LanguageModelV3Content,
+	LanguageModelV4,
+	LanguageModelV4CallOptions,
+	LanguageModelV4Content,
 } from "@ai-sdk/provider";
 import {
 	combineHeaders,
@@ -18,8 +18,8 @@ import {
 } from "./transliterate-settings";
 import { convertPromptToInput } from "./utils";
 
-export class SarvamTransliterateModel implements LanguageModelV3 {
-	readonly specificationVersion = "v3";
+export class SarvamTransliterateModel implements LanguageModelV4 {
+	readonly specificationVersion = "v4";
 
 	readonly modelId: "unknown";
 	readonly settings: TransliterateSettings;
@@ -41,7 +41,7 @@ export class SarvamTransliterateModel implements LanguageModelV3 {
 	}
 
 	private async getArgs(
-		options: LanguageModelV3CallOptions & {
+		options: LanguageModelV4CallOptions & {
 			stream: boolean;
 		},
 	) {
@@ -86,8 +86,8 @@ export class SarvamTransliterateModel implements LanguageModelV3 {
 	}
 
 	async doGenerate(
-		options: LanguageModelV3CallOptions,
-	): Promise<Awaited<ReturnType<LanguageModelV3["doGenerate"]>>> {
+		options: LanguageModelV4CallOptions,
+	): Promise<Awaited<ReturnType<LanguageModelV4["doGenerate"]>>> {
 		const { args } = await this.getArgs({
 			...options,
 			stream: false,
@@ -114,7 +114,7 @@ export class SarvamTransliterateModel implements LanguageModelV3 {
 
 		const transliteratedText = response.transliterated_text ?? "";
 
-		const content: LanguageModelV3Content[] = [
+		const content: LanguageModelV4Content[] = [
 			{ type: "text", text: transliteratedText },
 		];
 
@@ -157,8 +157,8 @@ export class SarvamTransliterateModel implements LanguageModelV3 {
 	}
 
 	async doStream(
-		_options: LanguageModelV3CallOptions,
-	): Promise<Awaited<ReturnType<LanguageModelV3["doStream"]>>> {
+		_options: LanguageModelV4CallOptions,
+	): Promise<Awaited<ReturnType<LanguageModelV4["doStream"]>>> {
 		throw new Error("Transliterate feature doesn't support streaming yet");
 	}
 }

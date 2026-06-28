@@ -1,12 +1,11 @@
 import {
-	type LanguageModelV3Prompt,
-	type LanguageModelV3ToolResultOutput,
+	type LanguageModelV4Prompt,
+	type LanguageModelV4ToolResultOutput,
 	UnsupportedFunctionalityError,
 } from "@ai-sdk/provider";
-import { convertUint8ArrayToBase64 } from "@ai-sdk/provider-utils";
-import type { SarvamChatPrompt } from "./types";
+import type { SarvamChatPrompt, SarvamMessageToolCall } from "./types";
 
-function getToolResultContent(output: LanguageModelV3ToolResultOutput): string {
+function getToolResultContent(output: LanguageModelV4ToolResultOutput): string {
 	switch (output.type) {
 		case "text":
 		case "error-text":
@@ -25,7 +24,7 @@ function getToolResultContent(output: LanguageModelV3ToolResultOutput): string {
 }
 
 export function convertToChatMessages(
-	prompt: LanguageModelV3Prompt,
+	prompt: LanguageModelV4Prompt,
 ): SarvamChatPrompt {
 	const messages: SarvamChatPrompt = [];
 
@@ -37,73 +36,27 @@ export function convertToChatMessages(
 			}
 
 			case "user": {
-				if (
-					message.content.length === 1 &&
-					message.content[0].type === "text"
-				) {
-					messages.push({
-						role: "user",
-						content: message.content[0].text,
-					});
-					break;
+				for (const part of message.content) {
+					if (part.type !== "text")
+						throw new UnsupportedFunctionalityError({
+							functionality: `Unsupported content part type: ${part.type}`,
+						});
+
+					const content = part.text.trim();
+
+					if (content)
+						messages.push({
+							role: "user",
+							content: part.text,
+						});
 				}
-
-				messages.push({
-					role: "user",
-					content: message.content.map((part) => {
-						switch (part.type) {
-							case "text": {
-								return { type: "text", text: part.text };
-							}
-							case "file": {
-								// Convert file to image_url format for backward compatibility
-								let imageData: string;
-								if (typeof part.data === "string") {
-									// Data is already base64 or URL
-									if (
-										part.data.startsWith("http://") ||
-										part.data.startsWith("https://")
-									) {
-										imageData = part.data;
-									} else {
-										// Assume it's base64
-										imageData = `data:${part.mediaType};base64,${part.data}`;
-									}
-								} else if (part.data instanceof URL) {
-									imageData = part.data.toString();
-								} else {
-									// Data is Uint8Array
-									imageData = `data:${part.mediaType};base64,${convertUint8ArrayToBase64(part.data)}`;
-								}
-
-								return {
-									type: "image_url",
-									image_url: {
-										url: imageData,
-									},
-								};
-							}
-
-							default: {
-								const _exhaustiveCheck: never = part;
-								throw new UnsupportedFunctionalityError({
-									functionality: `Unsupported content part type: ${_exhaustiveCheck}`,
-								});
-							}
-						}
-					}),
-				});
 
 				break;
 			}
 
 			case "assistant": {
 				let text = "";
-				const toolCalls: Array<{
-					id: string;
-					type: "function";
-					function: { name: string; arguments: string };
-				}> = [];
+				const toolCalls: SarvamMessageToolCall[] = [];
 
 				for (const part of message.content) {
 					switch (part.type) {
