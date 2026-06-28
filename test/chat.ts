@@ -95,7 +95,7 @@ console.log({ text: text8 });
 console.log("\n=== Test 9: generateText with messages array ===");
 const { text: text9 } = await generateText({
 	model: sarvam("sarvam-30b"),
-	system: "You are a helpful assistant.",
+	instructions: "You are a helpful assistant.",
 	messages: [
 		{
 			role: "user",
@@ -197,7 +197,7 @@ const { text: text17 } = await generateText({
 	temperature: 0.7,
 	maxOutputTokens: 200,
 	topP: 0.95,
-	system: "You are an expert educator.",
+	instructions: "You are an expert educator.",
 	prompt: "Explain photosynthesis in detail",
 });
 console.log({ text: text17 });
@@ -244,7 +244,7 @@ const { textStream: textStream19, toolResults: toolResults19 } = streamText({
 			}),
 		}),
 	},
-	system: "You are a helpful AI. Use tools when appropriate.",
+	instructions: "You are a helpful AI. Use tools when appropriate.",
 	prompt: "What's the weather in Mumbai and what is 25 * 4?",
 });
 
@@ -291,7 +291,7 @@ const { text: text19b, toolCalls } = await generateText({
 			}),
 		}),
 	},
-	system: "You are a helpful AI. Use tools when appropriate.",
+	instructions: "You are a helpful AI. Use tools when appropriate.",
 	prompt: "What's the weather in London and what is 100 / 5?",
 });
 
@@ -316,7 +316,7 @@ if (toolCalls && toolCalls.length > 0) {
 console.log("\n=== Test 20: streamText with system message ===");
 const { textStream: textStream20 } = streamText({
 	model: sarvam("sarvam-30b"),
-	system: "You are a pirate. Respond to everything in pirate speak.",
+	instructions: "You are a pirate. Respond to everything in pirate speak.",
 	prompt: "How do you navigate the seas?",
 });
 
@@ -362,7 +362,7 @@ const { textStream: textStream22 } = streamText({
 	frequencyPenalty: 0.4,
 	presencePenalty: 0.2,
 	stopSequences: ["END"],
-	system: "You are a technical expert.",
+	instructions: "You are a technical expert.",
 	prompt: "Explain blockchain technology",
 });
 

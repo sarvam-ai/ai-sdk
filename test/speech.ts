@@ -1,5 +1,5 @@
 import { writeFile } from "node:fs/promises";
-import { experimental_generateSpeech as generateSpeech } from "ai";
+import { generateSpeech } from "ai";
 import { sarvam } from "./sarvam";
 
 const { audio } = await generateSpeech({

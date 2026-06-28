@@ -1,22 +1,6 @@
-import { generateObject, generateText, Output } from "ai";
+import { generateText, Output } from "ai";
 import { z } from "zod";
 import { sarvam } from "./sarvam";
-
-const { object } = await generateObject({
-	model: sarvam("sarvam-30b"),
-	schemaName: "Recipe",
-	schemaDescription: "A recipe with a name, ingredients and steps",
-	schema: z.object({
-		recipe: z.object({
-			name: z.string(),
-			ingredients: z.array(z.string()),
-			steps: z.array(z.string()),
-		}),
-	}),
-	prompt: "Generate a South Indian recipe, in Malayalam",
-});
-
-console.log({ object });
 
 const { output } = await generateText({
 	model: sarvam("sarvam-105b"),

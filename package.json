@@ -3,7 +3,7 @@
 	"type": "module",
 	"description": "Sarvam provider support for Vercel's AI-SDK",
 	"version": "0.4.2-beta",
-	"main": "./dist/index.cjs",
+	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"files": [
@@ -21,7 +21,7 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
+			"default": "./dist/index.js"
 		}
 	},
 	"dependencies": {
@@ -47,6 +47,10 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"author": {
+		"name": "Rajat Sandeep",
+		"url": "https://rajatsandeepsen.github.io"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sarvamai/sarvam-ai-sdk.git"
@@ -60,6 +64,6 @@
 		"ai-sdk",
 		"sarvam",
 		"india",
-		"ai4bharat"
+		"bharat"
 	]
 }

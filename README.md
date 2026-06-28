@@ -33,7 +33,7 @@ npm i sarvam-ai-sdk ai@7
 You can import the default provider instance `sarvam` from `sarvam-ai-sdk`:
 
 ```ts
-import { sarvam } from 'sarvam-ai-sdk';
+import { sarvam } from "sarvam-ai-sdk";
 ```
 
 Create `.env` file with API key from **[Sarvam Dashboard](https://dashboard.sarvam.ai/)**
@@ -44,30 +44,30 @@ SARVAM_API_KEY="your_api_key"
 ## Example
 
 ```ts
-import { sarvam } from 'sarvam-ai-sdk';
-import { generateText } from 'ai';
+import { sarvam } from "sarvam-ai-sdk";
+import { generateText } from "ai";
 
 const { text } = await generateText({
 	model: sarvam("sarvam-30b"),
-    prompt: "Translate this to malayalam: 'Keep cooking, guys'",
+	prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 });
 
-console.log(text); // പാചകം തുടരൂ, സുഹൃത്തുക്കളേ
+console.log(text); // പചക തടര, സഹതകള
 ```
 
 ## Text-to-Speech
 
 ```ts
 import { sarvam } from "sarvam-ai-sdk";
-import { experimental_generateSpeech as generateSpeech } from "ai";
+import { generateSpeech } from "ai";
 import { writeFile } from "fs/promises";
 
 const { audio } = await generateSpeech({
-    model: sarvam.speech("bulbul:v3", "ml-IN"),
-    text: "പാചകം തുടരൂ, സുഹൃത്തുക്കളേ",
+	model: sarvam.speech("bulbul:v3", "ml-IN"),
+	text: "പചക തടര, സഹതകള",
 });
 
-const audioBuffer = Buffer.from(audio.base64, "base64")
+const audioBuffer = Buffer.from(audio.base64, "base64");
 await writeFile("./src/transcript-test.wav", audioBuffer);
 ```
 
@@ -75,12 +75,12 @@ await writeFile("./src/transcript-test.wav", audioBuffer);
 
 ```ts
 import { sarvam } from "sarvam-ai-sdk";
-import { experimental_transcribe as transcribe } from "ai";
+import { transcribe } from "ai";
 import { readFile } from "fs/promises";
 
 const { text } = await transcribe({
-    model: sarvam.transcription("saaras:v3", "en-IN"),
-    audio: await readFile("./src/transcript-test.wav"),
+	model: sarvam.transcription("saaras:v3", "en-IN"),
+	audio: await readFile("./src/transcript-test.wav"),
 });
 
 console.log(text); // Pachakam thudaroo, suhruthukkale.
@@ -96,10 +96,10 @@ import { generateText } from "ai";
 
 const result = await generateText({
 	model: sarvam.translation("mayura:v1", {
-        "from": "ml-IN",
-        "to": "en-IN",
-    }),
-    prompt: "ഇതൊക്കെ ശ്രദ്ധിക്കണ്ടേ അംബാനെ?",
+		from: "ml-IN",
+		to: "en-IN",
+	}),
+	prompt: "ഇതക ശദകണ അബന?",
 });
 
 console.log(result.text); // Shouldn't we be careful about this, Ambane?
@@ -114,14 +114,14 @@ import { sarvam } from "sarvam-ai-sdk";
 import { generateText } from "ai";
 
 const result = await generateText({
-  model: sarvam.transliterate({
-      to: "ml-IN",
-      from: "en-IN", // optional
-  }),
-  prompt: "eda mone, happy alle?",
+	model: sarvam.transliterate({
+		to: "ml-IN",
+		from: "en-IN", // optional
+	}),
+	prompt: "eda mone, happy alle?",
 });
 
-console.log(result.text); // എടാ മോനെ, ഹാപ്പി അല്ലേ?
+console.log(result.text); // എട മന, ഹപ അല?
 ```
 
 ## Language Identification
@@ -133,8 +133,8 @@ import { sarvam } from "sarvam-ai-sdk";
 import { generateText } from "ai";
 
 const result = await generateText({
-    model: sarvam.languageIdentification(),
-    prompt: "ബുദ്ധിയാണ് സാറേ ഇവൻ്റെ മെയിൻ",
+	model: sarvam.languageIdentification(),
+	prompt: "ബദയണ സറ ഇവൻറ മയൻ",
 });
 
 console.log(result.text); // ml-IN
@@ -147,51 +147,25 @@ import { z } from "zod";
 import { generateText, tool } from "ai";
 import { sarvam } from "sarvam-ai-sdk";
 
-
 const result = await generateText({
-  model: sarvam("sarvam-30b"),
-  tools: {
-    weather: tool({
-      description: "Get the weather in a location",
-      inputSchema: z.object({
-		location: z.string(),
-      }),
-      execute: async ({ location }) => ({
-        location,
-        temperature: 72 + Math.floor(Math.random() * 21) - 10,
-      }),
-    }),
-  },
-  system: "Your are a helpful AI",
-  prompt: "കൊച്ചിയിലെ കാലാവസ്ഥ എന്താണ്?",
+	model: sarvam("sarvam-30b"),
+	tools: {
+		weather: tool({
+			description: "Get the weather in a location",
+			inputSchema: z.object({
+				location: z.string(),
+			}),
+			execute: async ({ location }) => ({
+				location,
+				temperature: 72 + Math.floor(Math.random() * 21) - 10,
+			}),
+		}),
+	},
+	instructions: "Your are a helpful AI",
+	prompt: "കചയല കലവസ എനണ?",
 });
 
 console.log(result.toolResults);
-```
-
-## Generate JSON object
-> NB: `generateObject` is deprecated, use `generateText` with `Output` tool.
-
-```ts
-import { z } from "zod";
-import { sarvam } from "sarvam-ai-sdk";
-import { generateObject } from "ai";
-
-const { object } = await generateObject({
-	model: sarvam("sarvam-30b"),
-	schemaName: "Recipe",
-	schemaDescription: "A recipe with a name, ingredients and steps",
-	schema: z.object({
-		recipe: z.object({
-			name: z.string(),
-			ingredients: z.array(z.string()),
-			steps: z.array(z.string()),
-		}),
-	}),
-	prompt: "Generate a South Indian recipe, in Malayalam",
-});
-
-console.log(object);
 ```
 
 ## Generating Structured Outputs
@@ -244,7 +218,6 @@ sarvam.speech("bulbul:v3", "ml-IN");
 // Speech-to-Text
 sarvam.transcription("saaras:v3");
 ```
-
 
 ## Documentation
 

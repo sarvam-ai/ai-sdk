@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { experimental_transcribe as transcribe } from "ai";
+import { transcribe } from "ai";
 import { sarvam } from "./sarvam";
 
 const audioBuffer = await readFile("./test/transcript-test.wav");
