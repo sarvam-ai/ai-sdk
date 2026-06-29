@@ -13,31 +13,32 @@ import type {
 	SarvamToolChoice,
 } from "./types";
 
-export function prepareTools({
-	tools,
-	toolChoice,
-}: {
-	tools?: Array<LanguageModelV4FunctionTool | LanguageModelV4ProviderTool>;
-	toolChoice?: LanguageModelV4ToolChoice;
-}): {
+export function prepareTools(
+	{
+		tools,
+		toolChoice,
+	}: {
+		tools?: Array<LanguageModelV4FunctionTool | LanguageModelV4ProviderTool>;
+		toolChoice?: LanguageModelV4ToolChoice;
+	},
+	addWarning: (w: SharedV4Warning) => void,
+): {
 	tools?: SarvamTool[];
 	tool_choice?: SarvamToolChoice;
-	toolWarnings: SharedV4Warning[];
 } {
 	// when the tools array is empty, change it to undefined to prevent errors:
 	const finalTools = tools?.length ? tools : undefined;
-	const toolWarnings: SharedV4Warning[] = [];
 
 	if (finalTools == null) {
-		return { tools: undefined, tool_choice: undefined, toolWarnings };
+		return { tools: undefined, tool_choice: undefined };
 	}
 
 	const sarvamTools: SarvamTool[] = [];
 
 	for (const tool of finalTools) {
-		if (tool.type === "provider") {
-			toolWarnings.push({ type: "unsupported", feature: tool.name });
-		} else {
+		if (tool.type === "provider")
+			addWarning({ type: "unsupported", feature: tool.name });
+		else {
 			sarvamTools.push({
 				type: "function",
 				function: {
@@ -50,7 +51,7 @@ export function prepareTools({
 	}
 
 	if (toolChoice == null) {
-		return { tools: sarvamTools, tool_choice: undefined, toolWarnings };
+		return { tools: sarvamTools, tool_choice: undefined };
 	}
 
 	const type = toolChoice.type;
@@ -59,7 +60,7 @@ export function prepareTools({
 		case "auto":
 		case "none":
 		case "required":
-			return { tools: sarvamTools, tool_choice: type, toolWarnings };
+			return { tools: sarvamTools, tool_choice: type };
 		case "tool":
 			return {
 				tools: sarvamTools,
@@ -69,7 +70,6 @@ export function prepareTools({
 						name: toolChoice.toolName,
 					},
 				},
-				toolWarnings,
 			};
 		default: {
 			const _exhaustiveCheck: never = type;
@@ -128,7 +128,6 @@ export function prepareResponseFormatAsTool(
 	>,
 ): ReturnType<typeof prepareTools> {
 	return {
-		toolWarnings: [],
 		tool_choice: {
 			type: "function",
 			function: { name: responseFormat.name ?? "response" },

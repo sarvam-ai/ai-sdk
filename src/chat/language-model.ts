@@ -137,17 +137,20 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 
 		const toolsArg = jsonSchemaAsTool
 			? prepareResponseFormatAsTool(responseFormat)
-			: prepareTools({
-					tools,
-					toolChoice,
-				});
+			: prepareTools(
+					{
+						tools,
+						toolChoice,
+					},
+					(w) => warnings.push(w),
+				);
 
 		return {
 			args: {
 				...baseArgs,
 				...toolsArg,
 			},
-			warnings: [...warnings, ...toolsArg.toolWarnings],
+			warnings,
 			jsonSchemaAsTool,
 		};
 	}
