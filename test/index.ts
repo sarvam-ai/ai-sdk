@@ -4,7 +4,9 @@ import { z } from "zod";
 import { sarvam } from "./sarvam";
 
 const { text } = await generateText({
-	model: sarvam("sarvam-105b"),
+	model: sarvam("sarvam-105b", {
+		reasoning_effort: "low",
+	}),
 	prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 });
 
@@ -20,7 +22,7 @@ for await (const textPart of textStream) {
 	console.log(textPart);
 }
 
-import { experimental_generateSpeech as generateSpeech } from "ai";
+import { generateSpeech } from "ai";
 
 const { audio } = await generateSpeech({
 	model: sarvam.speech("bulbul:v3", "ml-IN"),
@@ -31,7 +33,7 @@ const audioBuffer = Buffer.from(audio.base64, "base64");
 await writeFile("./test/transcript-test.wav", audioBuffer);
 console.log("Speech generated");
 
-import { experimental_transcribe as transcribe } from "ai";
+import { transcribe } from "ai";
 
 const { text: transcription } = await transcribe({
 	model: sarvam.transcription("saaras:v3"),
