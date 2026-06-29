@@ -110,6 +110,13 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 
 		const jsonMode = this.settings.experimental_json_mode && !stream;
 
+		if (jsonMode) {
+			warnings.push({
+				type: "other",
+				message: "Experimental json_mode is enabled",
+			});
+		}
+
 		const baseArgs = {
 			model: this.modelId,
 			messages: convertToChatMessages(prompt),

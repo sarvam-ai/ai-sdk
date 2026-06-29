@@ -3,15 +3,19 @@ import { sarvamErrorDataSchema } from "../error";
 
 /**
  * @description Production models
- * @see https://console.sarvam.com/docs/models
+ * @see https://docs.sarvam.ai/api-reference-docs/chat/chat-completions
  */
 export type ChatModelId = "sarvam-30b" | "sarvam-105b" | (string & {});
 
 export type ChatSettings = {
 	/**
-	 * The effort to use for reasoning
+	 * The effort to use for reasoning.
+	 *
+	 * Can be disabled by explicitly setting to "none".
+	 *
+	 * @default "medium"
 	 */
-	reasoning_effort?: "low" | "medium" | "high";
+	reasoning_effort?: "none" | "low" | "medium" | "high";
 
 	/**
 	 * If set to true, the model response will be wiki grounded.
@@ -41,7 +45,10 @@ export type ChatSettings = {
 };
 
 export const chatSettingsSchema = z.object({
-	reasoning_effort: z.enum(["low", "medium", "high"]).nullish(),
+	reasoning_effort: z
+		.enum(["none", "low", "medium", "high"])
+		.transform((re) => (re === "none" ? null : re))
+		.nullish(),
 	wiki_grounding: z.boolean().nullish(),
 	n: z.number().min(1).max(128).nullish(),
 });
