@@ -4,7 +4,9 @@ import {
 	type LanguageModelV4CallOptions,
 	type LanguageModelV4Content,
 	type LanguageModelV4FinishReason,
+	type LanguageModelV4GenerateResult,
 	type LanguageModelV4StreamPart,
+	type LanguageModelV4StreamResult,
 	type SharedV4Warning,
 } from "@ai-sdk/provider";
 import {
@@ -21,7 +23,11 @@ import type { z } from "zod";
 import type { SarvamConfig } from "../config";
 import { sarvamFailedResponseHandler } from "../error";
 import { convertToChatMessages } from "./convert-to-chat-messages";
-import { prepareTools } from "./prepare-tools";
+import {
+	prepareResponseFormat,
+	prepareResponseFormatAsTool,
+	prepareTools,
+} from "./prepare-tools";
 import {
 	type ChatModelId,
 	type ChatSettings,
@@ -58,11 +64,7 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 		return {};
 	}
 
-	private async getArgs(
-		options: LanguageModelV4CallOptions & {
-			stream: boolean;
-		},
-	) {
+	private async getArgs(options: LanguageModelV4CallOptions, stream: boolean) {
 		const {
 			prompt,
 			maxOutputTokens,
@@ -77,7 +79,7 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 			tools,
 			toolChoice,
 			providerOptions,
-			stream,
+			reasoning,
 		} = options;
 
 		const warnings: SharedV4Warning[] = [];
@@ -93,6 +95,7 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 			provider: "sarvam",
 			providerOptions: {
 				sarvam: {
+					reasoning_effort: reasoning,
 					...providerOptions?.sarvam,
 					...this.settings,
 				},
@@ -100,11 +103,20 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 			schema: chatSettingsSchema,
 		});
 
+		const jsonSchemaAsTool =
+			responseFormat?.type === "json" &&
+			!stream &&
+			!this.settings.experimental_json_mode;
+
+		const jsonMode = this.settings.experimental_json_mode && !stream;
+
 		const baseArgs = {
 			model: this.modelId,
 			messages: convertToChatMessages(prompt),
+			response_format: jsonMode
+				? prepareResponseFormat(responseFormat)
+				: undefined,
 
-			// standardized settings:
 			max_tokens: maxOutputTokens,
 			temperature,
 			top_p: topP,
@@ -114,62 +126,32 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 			seed,
 
 			...sarvamOptions,
-
-			response_format:
-				// json object response format is not supported for streaming:
-				stream === false && responseFormat?.type === "json"
-					? { type: "json_object" }
-					: undefined,
 		};
 
-		let toolsArg: ReturnType<typeof prepareTools> | null = null;
-
-		if (tools && tools.length > 0) {
-			toolsArg = prepareTools({
-				tools,
-				toolChoice,
-			});
-		}
-
-		if (responseFormat?.type === "json") {
-			const objectMode = responseFormat;
-			toolsArg = {
-				toolWarnings: [],
-				tool_choice: {
-					type: "function",
-					function: { name: objectMode.name ?? "response" },
-				},
-				tools: [
-					{
-						type: "function",
-						function: {
-							name: objectMode.name ?? "response",
-							description: objectMode.description,
-							parameters: objectMode.schema,
-						},
-					},
-				],
-			} satisfies ReturnType<typeof prepareTools>;
-		}
+		const toolsArg = jsonSchemaAsTool
+			? prepareResponseFormatAsTool(responseFormat)
+			: prepareTools({
+					tools,
+					toolChoice,
+				});
 
 		return {
 			args: {
 				...baseArgs,
-				...(toolsArg ?? {}),
+				...toolsArg,
 			},
-			warnings: [...warnings, ...(toolsArg?.toolWarnings ?? [])],
+			warnings: [...warnings, ...toolsArg.toolWarnings],
+			jsonSchemaAsTool,
 		};
 	}
 
 	async doGenerate(
 		options: LanguageModelV4CallOptions,
-	): Promise<Awaited<ReturnType<LanguageModelV4["doGenerate"]>>> {
-		const { args, warnings } = await this.getArgs({
-			...options,
-			stream: false,
-		});
-
-		const isJSON = options.responseFormat?.type === "json";
+	): Promise<LanguageModelV4GenerateResult> {
+		const { args, warnings, jsonSchemaAsTool } = await this.getArgs(
+			options,
+			false,
+		);
 
 		const {
 			responseHeaders,
@@ -213,10 +195,9 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 			});
 		}
 
-		// Add tool calls if present
 		if (choice.message.tool_calls && choice.message.tool_calls.length > 0) {
 			for (const toolCall of choice.message.tool_calls) {
-				if (isJSON)
+				if (jsonSchemaAsTool)
 					content.push({
 						type: "text",
 						text: toolCall.function.arguments,
@@ -231,10 +212,14 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 			}
 		}
 
+		const finishReason = mapFinishReason(choice.finish_reason);
+		const unified =
+			jsonSchemaAsTool && finishReason === "tool-calls" ? "stop" : finishReason;
+
 		return {
 			content,
 			finishReason: {
-				unified: isJSON ? "stop" : mapFinishReason(choice.finish_reason),
+				unified,
 				raw: choice.finish_reason ?? undefined,
 			},
 			usage: {
@@ -274,8 +259,8 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 
 	async doStream(
 		options: LanguageModelV4CallOptions,
-	): Promise<Awaited<ReturnType<LanguageModelV4["doStream"]>>> {
-		const { args } = await this.getArgs({ ...options, stream: true });
+	): Promise<LanguageModelV4StreamResult> {
+		const { args } = await this.getArgs(options, true);
 
 		const { responseHeaders, value: response } = await postJsonToApi({
 			url: this.config.url({

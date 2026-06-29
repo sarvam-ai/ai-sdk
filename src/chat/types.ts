@@ -50,3 +50,33 @@ export interface SarvamToolMessage {
 	content: string;
 	tool_call_id: string;
 }
+
+export interface SarvamTool {
+	type: "function";
+	function: {
+		name: string;
+		description: string | undefined;
+		parameters: unknown;
+	};
+}
+
+export type SarvamToolChoice =
+	| { type: "function"; function: { name: string } }
+	| "auto"
+	| "none"
+	| "required";
+
+export type SarvamResponseFormat =
+	| {
+			type: "json_schema";
+			json_schema: Partial<{
+				name: string;
+				description: string;
+				schema: object;
+				strict: boolean;
+			}>;
+	  }
+	| {
+			type: "json_object";
+	  }
+	| undefined;

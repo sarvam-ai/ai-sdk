@@ -1,19 +1,17 @@
 import {
+	type LanguageModelV4CallOptions,
 	type LanguageModelV4FunctionTool,
 	type LanguageModelV4ProviderTool,
 	type LanguageModelV4ToolChoice,
+	type LanguageModelV4ToolResultOutput,
 	type SharedV4Warning,
 	UnsupportedFunctionalityError,
 } from "@ai-sdk/provider";
-
-type SarvamTools = Array<{
-	type: "function";
-	function: {
-		name: string;
-		description: string | undefined;
-		parameters: unknown;
-	};
-}>;
+import type {
+	SarvamResponseFormat,
+	SarvamTool,
+	SarvamToolChoice,
+} from "./types";
 
 export function prepareTools({
 	tools,
@@ -22,13 +20,8 @@ export function prepareTools({
 	tools?: Array<LanguageModelV4FunctionTool | LanguageModelV4ProviderTool>;
 	toolChoice?: LanguageModelV4ToolChoice;
 }): {
-	tools: SarvamTools | undefined;
-	tool_choice:
-		| { type: "function"; function: { name: string } }
-		| "auto"
-		| "none"
-		| "required"
-		| undefined;
+	tools?: SarvamTool[];
+	tool_choice?: SarvamToolChoice;
 	toolWarnings: SharedV4Warning[];
 } {
 	// when the tools array is empty, change it to undefined to prevent errors:
@@ -39,7 +32,7 @@ export function prepareTools({
 		return { tools: undefined, tool_choice: undefined, toolWarnings };
 	}
 
-	const sarvamTools: SarvamTools = [];
+	const sarvamTools: SarvamTool[] = [];
 
 	for (const tool of finalTools) {
 		if (tool.type === "provider") {
@@ -85,4 +78,70 @@ export function prepareTools({
 			});
 		}
 	}
+}
+
+export function getToolResultContent(
+	output: LanguageModelV4ToolResultOutput,
+): string {
+	switch (output.type) {
+		case "text":
+		case "error-text":
+			return output.value;
+		case "json":
+		case "error-json":
+		case "content":
+			return JSON.stringify(output.value);
+		case "execution-denied":
+			return output.reason ?? "Tool execution was denied.";
+		default: {
+			const _exhaustiveCheck: never = output;
+			return JSON.stringify(_exhaustiveCheck);
+		}
+	}
+}
+
+export function prepareResponseFormat(
+	responseFormat: LanguageModelV4CallOptions["responseFormat"],
+): SarvamResponseFormat {
+	if (!responseFormat || responseFormat.type !== "json") return;
+
+	if (responseFormat.schema)
+		return {
+			type: "json_schema",
+			json_schema: {
+				name: responseFormat.name ?? "response",
+				description: responseFormat.description,
+				schema: responseFormat.schema,
+				strict: true,
+			},
+		};
+
+	return {
+		type: "json_object",
+	};
+}
+
+export function prepareResponseFormatAsTool(
+	responseFormat: Extract<
+		NonNullable<LanguageModelV4CallOptions["responseFormat"]>,
+		{ type: "json" }
+	>,
+): ReturnType<typeof prepareTools> {
+	return {
+		toolWarnings: [],
+		tool_choice: {
+			type: "function",
+			function: { name: responseFormat.name ?? "response" },
+		},
+		tools: [
+			{
+				type: "function",
+				function: {
+					name: responseFormat.name ?? "response",
+					description: responseFormat.description,
+					parameters: responseFormat.schema,
+				},
+			},
+		],
+	};
 }

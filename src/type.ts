@@ -20,6 +20,7 @@ import type { TransliterateSettings } from "./ttt/transliterate-settings";
 export type SarvamProvider = {
 	/**
 	 * Creates a model for text generation.
+	 *
 	 * @example
 	 * 	const { text } = await generateText({
 	 * 		model: sarvam("sarvam-30b"),

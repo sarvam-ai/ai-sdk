@@ -1,27 +1,9 @@
 import {
 	type LanguageModelV4Prompt,
-	type LanguageModelV4ToolResultOutput,
 	UnsupportedFunctionalityError,
 } from "@ai-sdk/provider";
+import { getToolResultContent } from "./prepare-tools";
 import type { SarvamChatPrompt, SarvamMessageToolCall } from "./types";
-
-function getToolResultContent(output: LanguageModelV4ToolResultOutput): string {
-	switch (output.type) {
-		case "text":
-		case "error-text":
-			return output.value;
-		case "json":
-		case "error-json":
-		case "content":
-			return JSON.stringify(output.value);
-		case "execution-denied":
-			return output.reason ?? "Tool execution was denied.";
-		default: {
-			const _exhaustiveCheck: never = output;
-			return JSON.stringify(_exhaustiveCheck);
-		}
-	}
-}
 
 export function convertToChatMessages(
 	prompt: LanguageModelV4Prompt,

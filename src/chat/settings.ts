@@ -25,6 +25,19 @@ export type ChatSettings = {
 	 * Keep `n` as `1` to minimize costs.
 	 */
 	n?: number;
+
+	/**
+	 * Enables structured outputs, with or without a specified JSON schema.
+	 *
+	 * Early & Experimental, Sarvam model might not perform well.
+	 *
+	 * @example
+	 * true: JSON is generated with response_format
+	 * false: JSON is generated through tool calling argument
+	 *
+	 * @default false
+	 */
+	experimental_json_mode?: boolean;
 };
 
 export const chatSettingsSchema = z.object({
