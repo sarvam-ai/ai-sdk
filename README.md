@@ -54,7 +54,7 @@ const { text } = await generateText({
 	prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 });
 
-console.log(text); // പചക തടര, സഹതകള
+console.log(text); // പാചകം തുടരൂ, സുഹൃത്തുക്കളേ
 ```
 
 ## Text-to-Speech
@@ -66,7 +66,7 @@ import { writeFile } from "fs/promises";
 
 const { audio } = await generateSpeech({
 	model: sarvam.speech("bulbul:v3", "ml-IN"),
-	text: "പചക തടര, സഹതകള",
+	text: "പാചകം തുടരൂ, സുഹൃത്തുക്കളേ",
 });
 
 const audioBuffer = Buffer.from(audio.base64, "base64");
@@ -101,7 +101,7 @@ const result = await generateText({
 		from: "ml-IN",
 		to: "en-IN",
 	}),
-	prompt: "ഇതക ശദകണ അബന?",
+	prompt: "ഇതൊക്കെ ശ്രദ്ധിക്കണ്ടേ അംബാനെ?",
 });
 
 console.log(result.text); // Shouldn't we be careful about this, Ambane?
@@ -123,7 +123,7 @@ const result = await generateText({
 	prompt: "eda mone, happy alle?",
 });
 
-console.log(result.text); // എട മന, ഹപ അല?
+console.log(result.text); // എടാ മോനെ, ഹാപ്പി അല്ലേ?
 ```
 
 ## Language Identification
@@ -136,7 +136,7 @@ import { generateText } from "ai";
 
 const result = await generateText({
 	model: sarvam.languageIdentification(),
-	prompt: "ബദയണ സറ ഇവൻറ മയൻ",
+	prompt: "ബുദ്ധിയാണ് സാറേ ഇവൻ്റെ മെയിൻ",
 });
 
 console.log(result.text); // ml-IN
@@ -164,7 +164,7 @@ const result = await generateText({
 		}),
 	},
 	instructions: "Your are a helpful AI",
-	prompt: "കചയല കലവസ എനണ?",
+	prompt: "കൊച്ചിയിലെ കാലാവസ്ഥ എന്താണ്?",
 });
 
 console.log(result.toolResults);
@@ -181,6 +181,9 @@ const { output } = await generateText({
 	model: sarvam("sarvam-105b", {
 		// uncomment to enable direct JSON mode
 		// experimental_json_mode: true,
+
+		// uncomment to reduce inference time
+		// reasoning_effort: "none",
 	}),
 	output: Output.object({
 		name: "Recipe",
@@ -202,7 +205,10 @@ console.log(output);
 ## All APIs
 
 ```ts
-import { sarvam } from "sarvam-ai-sdk";
+import { sarvam, createSarvam } from "sarvam-ai-sdk";
+
+// Override `SARVAM_API_KEY` using
+createSarvam({ apiKey: "your_api_key" })
 
 // Text-to-Text + Chat Completion
 sarvam("sarvam-105b");
