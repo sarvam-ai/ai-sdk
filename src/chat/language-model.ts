@@ -327,6 +327,8 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 			},
 		};
 		let isFirstChunk = true;
+		let isActiveReasoning = false;
+		let isActiveText = false;
 
 		return {
 			stream: response.pipeThrough(
@@ -402,44 +404,57 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 
 						// Handle reasoning
 						if (delta.reasoning != null && delta.reasoning.length > 0) {
-							controller.enqueue({
-								type: "reasoning-start",
-								id: "reasoning-0",
-							});
+							if (!isActiveReasoning) {
+								controller.enqueue({
+									type: "reasoning-start",
+									id: "reasoning-0",
+								});
+								isActiveReasoning = true;
+							}
 
 							controller.enqueue({
 								type: "reasoning-delta",
 								id: "reasoning-0",
 								delta: delta.reasoning,
 							});
-
-							controller.enqueue({
-								type: "reasoning-end",
-								id: "reasoning-0",
-							});
 						}
 
 						// Handle text content
 						if (delta.content != null && delta.content.length > 0) {
-							controller.enqueue({
-								type: "text-start",
-								id: "text-0",
-							});
+							// the answer has started, so the reasoning is done
+							if (isActiveReasoning) {
+								controller.enqueue({
+									type: "reasoning-end",
+									id: "reasoning-0",
+								});
+								isActiveReasoning = false;
+							}
+
+							if (!isActiveText) {
+								controller.enqueue({
+									type: "text-start",
+									id: "text-0",
+								});
+								isActiveText = true;
+							}
 
 							controller.enqueue({
 								type: "text-delta",
 								id: "text-0",
 								delta: delta.content,
 							});
-
-							controller.enqueue({
-								type: "text-end",
-								id: "text-0",
-							});
 						}
 
 						// Handle tool calls
 						if (delta.tool_calls != null) {
+							if (isActiveReasoning) {
+								controller.enqueue({
+									type: "reasoning-end",
+									id: "reasoning-0",
+								});
+								isActiveReasoning = false;
+							}
+
 							for (const toolCallDelta of delta.tool_calls) {
 								const index = toolCallDelta.index;
 
@@ -551,6 +566,20 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 					},
 
 					flush(controller) {
+						if (isActiveReasoning) {
+							controller.enqueue({
+								type: "reasoning-end",
+								id: "reasoning-0",
+							});
+						}
+
+						if (isActiveText) {
+							controller.enqueue({
+								type: "text-end",
+								id: "text-0",
+							});
+						}
+
 						controller.enqueue({
 							type: "finish",
 							finishReason,
