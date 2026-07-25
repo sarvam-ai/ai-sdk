@@ -29,7 +29,7 @@ export function convertToChatMessages(
 					if (content)
 						messages.push({
 							role: "user",
-							content: part.text,
+							content,
 						});
 				}
 

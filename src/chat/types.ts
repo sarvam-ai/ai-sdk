@@ -16,7 +16,7 @@ export interface SarvamUserMessage {
 	content: string; // | Array<SarvamContentPart>;
 }
 
-// Sarvam Chat Models doesn't support file inputs
+// Sarvam Chat Models doesn't support file inputs or content array parts as input
 
 export type SarvamContentPart = SarvamContentPartText | SarvamContentPartImage;
 
