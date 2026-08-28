@@ -11,6 +11,6 @@ export const sarvam = createSarvam({
 });
 
 const sarvamWrapped = wrapLanguageModel({
-	model: rawSarvam("sarvam-30b"),
+	model: rawSarvam("sarvam-105b"),
 	middleware: [],
 });

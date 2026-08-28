@@ -2,7 +2,7 @@
 	"name": "sarvam-ai-sdk",
 	"type": "module",
 	"description": "Sarvam provider support for Vercel's AI-SDK",
-	"version": "0.4.2",
+	"version": "0.4.3",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -10,6 +10,8 @@
 		"dist/**/*"
 	],
 	"scripts": {
+		"prepublishOnly": "bun run build",
+		"pack": "bun pm pack --filename package.tgz",
 		"build": "tsdown",
 		"build:watch": "tsdown --watch",
 		"type-check": "tsc --noEmit",
@@ -48,8 +50,8 @@
 		"access": "public"
 	},
 	"author": {
-		"name": "Rajat Sandeep",
-		"url": "https://rajatsandeepsen.github.io"
+		"name": "Sarvam AI",
+		"url": "https://sarvam.ai"
 	},
 	"repository": {
 		"type": "git",
@@ -58,10 +60,11 @@
 	"bugs": {
 		"url": "https://github.com/sarvamai/sarvam-ai-sdk/issues"
 	},
-	"homepage": "https://docs.sarvam.ai",
+	"homepage": "https://docs.sarvam.ai/api/integration/vercel-ai-sdk",
 	"keywords": [
 		"ai",
 		"ai-sdk",
+		"vercel",
 		"sarvam",
 		"india",
 		"bharat"

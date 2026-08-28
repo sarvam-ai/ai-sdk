@@ -34,19 +34,20 @@ import {
 	chatChunkSchema,
 	chatResponseSchema,
 	chatSettingsSchema,
+	type OpenSourceModelId,
 } from "./settings";
 import { getResponseMetadata, mapFinishReason } from "./utils";
 
 export class SarvamChatLanguageModel implements LanguageModelV4 {
 	readonly specificationVersion = "v4";
 
-	readonly modelId: ChatModelId;
+	readonly modelId: ChatModelId | OpenSourceModelId;
 	readonly settings: ChatSettings;
 
 	private readonly config: SarvamConfig;
 
 	constructor(
-		modelId: ChatModelId,
+		modelId: ChatModelId | OpenSourceModelId,
 		settings: ChatSettings,
 		config: SarvamConfig,
 	) {

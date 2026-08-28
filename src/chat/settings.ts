@@ -5,9 +5,36 @@ import { sarvamErrorDataSchema } from "../error";
  * @description Production models
  * @see https://docs.sarvam.ai/api-reference-docs/chat/chat-completions
  */
-export type ChatModelId = "sarvam-30b" | "sarvam-105b" | (string & {});
+export type ChatModelId =
+	| "sarvam-105b"
+	| "sarvam-105b-conversations"
+	| (string & {});
 
-export type ChatSettings = {
+/**
+ * @description Open source models
+ * @see https://docs.sarvam.ai/api/getting-started/models/open-source
+ */
+export type OpenSourceModelId = "glm5.2" | "gemma4" | "deepseekv4-flash";
+
+export type ChatSettings<
+	T extends ChatModelId | OpenSourceModelId = ChatModelId,
+> = {
+	/**
+	 * Alongside its own models, Sarvam serves a small set of open-source models.
+	 *
+	 * Open-source models are served on v2.
+	 *
+	 * Sarvam chat models are on v1.
+	 *
+	 * @see https://docs.sarvam.ai/api/getting-started/models/open-source
+	 *
+	 * @default "v1"
+	 */
+	version?: T extends "sarvam-105b-conversations"
+		? "v1"
+		: T extends OpenSourceModelId
+			? "v2"
+			: "v1" | "v2";
 	/**
 	 * The effort to use for reasoning.
 	 *
@@ -31,6 +58,15 @@ export type ChatSettings = {
 	n?: number;
 
 	/**
+	 * Extra body to be sent to the model.
+	 *
+	 * Only available on v2.
+	 *
+	 * @default {}
+	 */
+	extra_body?: Record<string, any>;
+
+	/**
 	 * Enables structured outputs, with or without a specified JSON schema.
 	 *
 	 * Early & Experimental, Sarvam model might not perform well.
@@ -51,6 +87,7 @@ export const chatSettingsSchema = z.object({
 		.nullish(),
 	wiki_grounding: z.boolean().nullish(),
 	n: z.number().min(1).max(128).nullish(),
+	extra_body: z.record(z.string(), z.any()).nullish(),
 });
 
 export const chatResponseSchema = z.object({

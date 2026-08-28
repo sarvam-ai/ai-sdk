@@ -4,7 +4,11 @@ import type {
 	TranscriptionModelV4,
 } from "@ai-sdk/provider";
 
-import type { ChatModelId, ChatSettings } from "./chat/settings";
+import type {
+	ChatModelId,
+	ChatSettings,
+	OpenSourceModelId,
+} from "./chat/settings";
 import type { MoreSarvamLanguageCode, SarvamLanguageCode } from "./config";
 import type {
 	TranscriptionModelId,
@@ -23,33 +27,42 @@ export type SarvamProvider = {
 	 *
 	 * @example
 	 * 	const { text } = await generateText({
-	 * 		model: sarvam("sarvam-30b"),
+	 * 		model: sarvam("sarvam-105b"),
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV4;
+	<T extends ChatModelId | OpenSourceModelId>(
+		modelId: T,
+		settings?: ChatSettings<T>,
+	): LanguageModelV4;
 
 	/**
 	 * Creates an Sarvam chat model for text generation.
 	 *
 	 * @example
 	 * 	const { text } = await generateText({
-	 * 		model: sarvam.languageModel("sarvam-30b"),
+	 * 		model: sarvam.languageModel("sarvam-105b"),
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	languageModel(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV4;
+	languageModel<T extends ChatModelId | OpenSourceModelId>(
+		modelId: T,
+		settings?: ChatSettings<T>,
+	): LanguageModelV4;
 
 	/**
 	 * Creates a Sarvam model for chat.
 	 *
 	 * @example
 	 * 	const { text } = await generateText({
-	 * 		model: sarvam.chat("sarvam-30b"),
+	 * 		model: sarvam.chat("sarvam-105b"),
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	chat(modelId: ChatModelId, settings?: ChatSettings): LanguageModelV4;
+	chat<T extends ChatModelId | OpenSourceModelId>(
+		modelId: T,
+		settings?: ChatSettings<T>,
+	): LanguageModelV4;
 
 	/**
 	 * Creates a Sarvam model for transcription.

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { sarvam } from "../sarvam";
 
 const { toolResults } = await generateText({
-	model: sarvam("sarvam-30b", {
+	model: sarvam("sarvam-105b", {
 		reasoning_effort: "none",
 	}),
 	tools: {

@@ -16,7 +16,7 @@ test("doStream brackets streamed tool call input", async () => {
 					{
 						id: "chatcmpl_test",
 						created: 0,
-						model: "sarvam-30b",
+						model: "sarvam-105b",
 						choices: [
 							{
 								index: 0,
@@ -39,7 +39,7 @@ test("doStream brackets streamed tool call input", async () => {
 					{
 						id: "chatcmpl_test",
 						created: 0,
-						model: "sarvam-30b",
+						model: "sarvam-105b",
 						choices: [
 							{
 								index: 0,
@@ -59,7 +59,7 @@ test("doStream brackets streamed tool call input", async () => {
 					{
 						id: "chatcmpl_test",
 						created: 0,
-						model: "sarvam-30b",
+						model: "sarvam-105b",
 						choices: [
 							{
 								index: 0,
@@ -77,7 +77,7 @@ test("doStream brackets streamed tool call input", async () => {
 			),
 	});
 
-	const result = await sarvam.chat("sarvam-30b").doStream({
+	const result = await sarvam.chat("sarvam-105b").doStream({
 		prompt: [
 			{
 				role: "user",

@@ -3,8 +3,10 @@ import { z } from "zod";
 /**
  * - `saaras:v3`: State-of-the-art model with 23-language support and flexible output formats.
  *   Supports multiple modes via the mode parameter: transcribe, translate, verbatim, translit, codemix.
+ *
+ * - `saaras:v4`: latest model, adding Global English support (in addition to Indian English) across all output modes while keeping the same 22 Indic language coverage.
  */
-export type TranscriptionModelId = "saaras:v3" | (string & {});
+export type TranscriptionModelId = "saaras:v3" | "saaras:v4" | (string & {});
 
 export const transcriptionProviderOptionsSchema = z.object({
 	mode: z

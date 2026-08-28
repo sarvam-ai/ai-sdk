@@ -4,7 +4,7 @@
 
 # AI SDK - Sarvam Provider
 
-The **[Sarvam provider](https://v7.ai-sdk.dev/providers/community-providers/sarvam)** for the [AI SDK](https://v7.ai-sdk.dev/docs)
+The **[Sarvam provider](https://docs.sarvam.ai/api/integration/vercel-ai-sdk)** for the [AI SDK](https://v7.ai-sdk.dev/docs)
 contains language model support for the Sarvam chat completion, Text-to-Speech and Speech-to-Text APIs.
 
 ## Setup
@@ -48,7 +48,7 @@ import { sarvam } from "sarvam-ai-sdk";
 import { generateText } from "ai";
 
 const { text } = await generateText({
-	model: sarvam("sarvam-30b", {
+	model: sarvam("sarvam-105b", {
 		reasoning_effort: "low",
 	}),
 	prompt: "Translate this to malayalam: 'Keep cooking, guys'",
@@ -81,7 +81,7 @@ import { transcribe } from "ai";
 import { readFile } from "fs/promises";
 
 const { text } = await transcribe({
-	model: sarvam.transcription("saaras:v3", "en-IN"),
+	model: sarvam.transcription("saaras:v4", "en-IN"),
 	audio: await readFile("./src/transcript-test.wav"),
 });
 
@@ -150,7 +150,7 @@ import { generateText, tool } from "ai";
 import { sarvam } from "sarvam-ai-sdk";
 
 const result = await generateText({
-	model: sarvam("sarvam-30b"),
+	model: sarvam("sarvam-105b"),
 	tools: {
 		weather: tool({
 			description: "Get the weather in a location",
@@ -211,8 +211,10 @@ import { sarvam, createSarvam } from "sarvam-ai-sdk";
 createSarvam({ apiKey: "your_api_key" })
 
 // Text-to-Text + Chat Completion
-sarvam("sarvam-105b");
-sarvam.languageModel("sarvam-30b");
+sarvam("sarvam-105b-conversations");
+sarvam.languageModel("sarvam-105b", {
+	version: "v2",
+});
 
 // Text-to-Text + Transliteration
 sarvam.transliterate({ to: "ml-IN", from: "en-IN" });
@@ -227,9 +229,9 @@ sarvam.languageIdentification();
 sarvam.speech("bulbul:v3", "ml-IN");
 
 // Speech-to-Text
-sarvam.transcription("saaras:v3");
+sarvam.transcription("saaras:v4");
 ```
 
 ## Documentation
 
-Please check out the **[Sarvam provider documentation](https://v7.ai-sdk.dev/providers/community-providers/sarvam)** and **[Sarvam API documentation](https://docs.sarvam.ai)** for more information.
+Please check out the **[Sarvam provider documentation](https://docs.sarvam.ai/api/integration/vercel-ai-sdk)** and **[Sarvam API documentation](https://docs.sarvam.ai)** for more information.

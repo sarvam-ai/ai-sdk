@@ -13,7 +13,7 @@ const { text } = await generateText({
 console.log({ text }); // പാചകം തുടരൂ, സുഹൃത്തുക്കളേ
 
 const { textStream } = streamText({
-	model: sarvam("sarvam-30b"),
+	model: sarvam("sarvam-105b"),
 	system: "You are a pirate. Respond to everything in pirate speak.",
 	prompt: "How do you navigate the seas?",
 });
@@ -72,7 +72,7 @@ console.log({ languageIdentification }); // ml-IN
 import { tool } from "ai";
 
 const { toolResults } = await generateText({
-	model: sarvam("sarvam-30b"),
+	model: sarvam("sarvam-105b"),
 	tools: {
 		weather: tool({
 			description: "Get the weather in a location",
@@ -94,7 +94,7 @@ console.log(toolResults);
 import { generateObject } from "ai";
 
 const { object } = await generateObject({
-	model: sarvam("sarvam-30b"),
+	model: sarvam("sarvam-105b"),
 	schemaName: "Recipe",
 	schemaDescription: "A recipe with a name, ingredients and steps",
 	schema: z.object({

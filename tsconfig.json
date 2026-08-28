@@ -1,6 +1,5 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"display": "TypeScript Library",
 	"compilerOptions": {
 		"composite": false,
 		"declaration": true,
@@ -27,5 +26,5 @@
 		}
 	},
 	"include": ["."],
-	"exclude": ["*/dist", "dist", "build", "node_modules"]
+	"exclude": ["dist", "build", "node_modules"]
 }
