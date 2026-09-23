@@ -38,3 +38,5 @@ jobs:
 
             - name: Stage package to npm
               run: npm stage publish
+              env:
+                  NPM_CONFIG_PROVENANCE: false
