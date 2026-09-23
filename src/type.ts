@@ -7,7 +7,7 @@ import type {
 import type {
 	ChatModelId,
 	ChatSettings,
-	OpenSourceModelId,
+	OpenWeightModelId,
 } from "./chat/settings";
 import type { MoreSarvamLanguageCode, SarvamLanguageCode } from "./config";
 import type {
@@ -31,7 +31,7 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	<T extends ChatModelId | OpenSourceModelId>(
+	<T extends ChatModelId | OpenWeightModelId>(
 		modelId: T,
 		settings?: ChatSettings<T>,
 	): LanguageModelV4;
@@ -45,7 +45,7 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	languageModel<T extends ChatModelId | OpenSourceModelId>(
+	languageModel<T extends ChatModelId | OpenWeightModelId>(
 		modelId: T,
 		settings?: ChatSettings<T>,
 	): LanguageModelV4;
@@ -59,7 +59,7 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	chat<T extends ChatModelId | OpenSourceModelId>(
+	chat<T extends ChatModelId | OpenWeightModelId>(
 		modelId: T,
 		settings?: ChatSettings<T>,
 	): LanguageModelV4;

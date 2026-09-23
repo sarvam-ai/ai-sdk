@@ -11,28 +11,28 @@ export type ChatModelId =
 	| (string & {});
 
 /**
- * @description Open source models
- * @see https://docs.sarvam.ai/api/getting-started/models/open-source
+ * @description Open weight models
+ * @see https://docs.sarvam.ai/api/getting-started/models/openweight
  */
-export type OpenSourceModelId = "glm5.2" | "gemma4" | "deepseekv4-flash";
+export type OpenWeightModelId = "glm5.3" | "gemma4" | "deepseekv4-flash";
 
 export type ChatSettings<
-	T extends ChatModelId | OpenSourceModelId = ChatModelId,
+	T extends ChatModelId | OpenWeightModelId = ChatModelId,
 > = {
 	/**
-	 * Alongside its own models, Sarvam serves a small set of open-source models.
+	 * Alongside its own models, Sarvam serves a small set of open-weight models.
 	 *
-	 * Open-source models are served on v2.
+	 * Open-weight models are served on v2.
 	 *
 	 * Sarvam chat models are on v1.
 	 *
-	 * @see https://docs.sarvam.ai/api/getting-started/models/open-source
+	 * @see https://docs.sarvam.ai/api/getting-started/models/openweight
 	 *
 	 * @default "v1"
 	 */
 	version?: T extends "sarvam-105b-conversations"
 		? "v1"
-		: T extends OpenSourceModelId
+		: T extends OpenWeightModelId
 			? "v2"
 			: "v1" | "v2";
 	/**
