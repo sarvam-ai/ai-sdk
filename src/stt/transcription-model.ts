@@ -87,11 +87,13 @@ export class SarvamTranscriptionModel implements TranscriptionModelV4 {
 			audio instanceof Blob ? audio : new Blob([audio], { type: mediaType });
 		formData.append("file", blob);
 
-		// Optional provider-specific options
 		if (sarvamOptions) {
 			Object.entries(sarvamOptions).forEach(([key, value]) => {
 				if (value !== undefined && value !== null) {
-					formData.append(key, String(value));
+					formData.append(
+						key,
+						Array.isArray(value) ? JSON.stringify(value) : String(value),
+					);
 				}
 			});
 		}

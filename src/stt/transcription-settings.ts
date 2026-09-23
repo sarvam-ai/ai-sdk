@@ -13,10 +13,10 @@ export const transcriptionProviderOptionsSchema = z.object({
 		.enum(["transcribe", "translate", "verbatim", "translit", "codemix"])
 		.nullish(),
 	with_timestamps: z.boolean().nullish(),
+	keyterms: z.array(z.string().max(64)).max(50).nullish(),
 });
 
 export type TranscriptionSettings<
-	// biome-ignore lint/correctness/noUnusedVariables: <For Future Models>
 	T extends TranscriptionModelId = TranscriptionModelId,
 > = {
 	/**
@@ -38,6 +38,14 @@ export type TranscriptionSettings<
 	 * Useful for subtitle alignment and audio navigation.
 	 */
 	with_timestamps?: boolean;
+
+	/**
+	 * List of up to 50 domain-specific terms (names, places, brands, technical terms) to bias recognition toward.
+	 * Each keyterm can contain up to 64 characters
+	 *
+	 * They do not guarantee that a term will appear in the transcript
+	 */
+	keyterms?: T extends "saaras:v4" ? string[] : never;
 };
 
 export const transcriptionResponseSchema = z.object({

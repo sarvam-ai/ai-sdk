@@ -7,7 +7,9 @@ const audioBuffer = await readFile("./test/transcript-test.wav");
 // Test 1: Basic transcription in English
 console.log("Test 1: Basic transcription (English)");
 const test1 = await transcribe({
-	model: sarvam.transcription("saaras:v3", "en-IN"),
+	model: sarvam.transcription("saaras:v4", "en-IN", {
+		keyterms: ["pachakam"],
+	}),
 	audio: audioBuffer,
 });
 console.log("Result:", test1.text);
