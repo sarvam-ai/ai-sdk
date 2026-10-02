@@ -48,7 +48,7 @@ export const SarvamChatModelInfo = {
  * - context_window: maximum number of tokens the model can handle read
  * - max_tokens: maximum number of tokens
  */
-export const OpenWeightModelInfo = {
+const OpenWeightModelInfo = {
 	gemma4: {
 		context_window: 131_072,
 	},

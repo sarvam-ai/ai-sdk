@@ -4,11 +4,7 @@ import type {
 	TranscriptionModelV4,
 } from "@ai-sdk/provider";
 
-import type {
-	ChatModelId,
-	ChatSettings,
-	OpenWeightModelId,
-} from "./chat/settings";
+import type { ChatSettings, EveryChatModelId } from "./chat/settings";
 import type { MoreSarvamLanguageCode, SarvamLanguageCode } from "./config";
 import type {
 	TranscriptionModelId,
@@ -31,7 +27,7 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	<T extends ChatModelId | OpenWeightModelId>(
+	<T extends EveryChatModelId>(
 		modelId: T,
 		settings?: ChatSettings<T>,
 	): LanguageModelV4;
@@ -45,7 +41,7 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	languageModel<T extends ChatModelId | OpenWeightModelId>(
+	languageModel<T extends EveryChatModelId>(
 		modelId: T,
 		settings?: ChatSettings<T>,
 	): LanguageModelV4;
@@ -59,7 +55,7 @@ export type SarvamProvider = {
 	 * 		prompt: "Translate this to malayalam: 'Keep cooking, guys'",
 	 * 	});
 	 */
-	chat<T extends ChatModelId | OpenWeightModelId>(
+	chat<T extends EveryChatModelId>(
 		modelId: T,
 		settings?: ChatSettings<T>,
 	): LanguageModelV4;

@@ -16,9 +16,9 @@ export type ChatModelId =
  */
 export type OpenWeightModelId = "glm5.3" | "gemma4" | "deepseekv4-flash";
 
-export type ChatSettings<
-	T extends ChatModelId | OpenWeightModelId = ChatModelId,
-> = {
+export type EveryChatModelId = ChatModelId; // | OpenWeightModelId
+
+export type ChatSettings<T extends EveryChatModelId = EveryChatModelId> = {
 	/**
 	 * Alongside its own models, Sarvam serves a small set of open-weight models.
 	 *

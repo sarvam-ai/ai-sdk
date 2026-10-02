@@ -29,25 +29,24 @@ import {
 	prepareTools,
 } from "./prepare-tools";
 import {
-	type ChatModelId,
 	type ChatSettings,
 	chatChunkSchema,
 	chatResponseSchema,
 	chatSettingsSchema,
-	type OpenWeightModelId,
+	type EveryChatModelId,
 } from "./settings";
 import { getResponseMetadata, mapFinishReason } from "./utils";
 
 export class SarvamChatLanguageModel implements LanguageModelV4 {
 	readonly specificationVersion = "v4";
 
-	readonly modelId: ChatModelId | OpenWeightModelId;
+	readonly modelId: EveryChatModelId;
 	readonly settings: ChatSettings;
 
 	private readonly config: SarvamConfig;
 
 	constructor(
-		modelId: ChatModelId | OpenWeightModelId,
+		modelId: EveryChatModelId,
 		settings: ChatSettings,
 		config: SarvamConfig,
 	) {
