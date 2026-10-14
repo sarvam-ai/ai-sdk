@@ -85,7 +85,7 @@ export type SarvamProvider = {
 	 * Creates a Sarvam model for speech.
 	 * @example
 	 *	const { audio } = await generateSpeech({
-	 *		model: sarvam.speech("bulbul:v4", "ml-IN"),
+	 *		model: sarvam.speech("bulbul:v4-flash", "ml-IN"),
 	 *		text: "പാചകം തുടരൂ, സുഹൃത്തുക്കളേ",
 	 * 	});
 	 *
