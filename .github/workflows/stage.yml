@@ -1,13 +1,12 @@
 name: Stage Package for Release
 
 on:
+    workflow_dispatch:
     push:
-        branches: [v7]
+        branches: [main]
         paths:
             - "package.json"
             - ".github/workflows/stage.yml"
-
-    workflow_dispatch:
 
 jobs:
     stage:
@@ -38,5 +37,3 @@ jobs:
 
             - name: Stage package to npm
               run: npm stage publish
-              env:
-                  NPM_CONFIG_PROVENANCE: false
