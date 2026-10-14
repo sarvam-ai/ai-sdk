@@ -179,11 +179,8 @@ import { generateText, Output } from "ai";
 
 const { output } = await generateText({
 	model: sarvam("sarvam-105b", {
-		// uncomment to enable direct JSON mode
-		// experimental_json_mode: true,
-
-		// uncomment to reduce inference time
-		// reasoning_effort: "none",
+		experimental_json_mode: true, // to enable direct JSON mode
+		reasoning_effort: "none", // to reduce inference time
 	}),
 	output: Output.object({
 		name: "Recipe",
@@ -207,12 +204,18 @@ console.log(output);
 Build durable agents with Vercel's Eve Framework.
 
 ```ts
+import { simulateStreamingMiddleware, wrapLanguageModel } from "ai";
 import { defineAgent } from "eve";
 import { sarvam } from "sarvam-ai-sdk";
 import { SarvamChatModelInfo } from "sarvam-ai-sdk/info";
 
-export default defineAgent({
+const model = wrapLanguageModel({
 	model: sarvam("sarvam-105b"),
+	middleware: simulateStreamingMiddleware(),
+});
+
+export default defineAgent({
+	model,
 	modelContextWindowTokens: SarvamChatModelInfo["sarvam-105b"].context_window,
 });
 ```
@@ -242,6 +245,9 @@ sarvam.languageIdentification();
 
 // Text-to-Speech
 sarvam.speech("bulbul:v3", "ml-IN");
+sarvam.speech("bulbul:v4-flash", "hi-IN", { 
+	speaker: "shubh_enhi_companion"
+});
 
 // Speech-to-Text
 sarvam.transcription("saaras:v4");

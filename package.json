@@ -2,7 +2,7 @@
 	"name": "sarvam-ai-sdk",
 	"type": "module",
 	"description": "Sarvam provider support for Vercel's AI-SDK",
-	"version": "0.4.5",
+	"version": "0.4.6",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -14,8 +14,7 @@
 		"pack": "bun pm pack --filename package.tgz",
 		"build": "tsdown",
 		"build:watch": "tsdown --watch",
-		"type-check": "tsc --noEmit",
-		"check": "biome check",
+		"check": "tsc --noEmit",
 		"test": "bun test"
 	},
 	"exports": {

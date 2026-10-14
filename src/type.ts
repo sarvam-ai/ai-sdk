@@ -91,10 +91,10 @@ export type SarvamProvider = {
 	 *
 	 * 	await writeFile("./audio.wav", Buffer.from(audio.base64, "base64"));
 	 */
-	speech<T extends SpeechModelId>(
+	speech<T extends SpeechModelId, L extends SarvamLanguageCode>(
 		modelId: T,
-		languageCode: SarvamLanguageCode,
-		settings?: SpeechSettings<T>,
+		languageCode: L,
+		settings?: SpeechSettings<T, L>,
 	): SpeechModelV4;
 
 	/**

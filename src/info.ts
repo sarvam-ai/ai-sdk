@@ -112,6 +112,11 @@ export const SarvamSpeechModelInfo = {
 		max_characters_streaming: 3500,
 		max_characters_websocket: 2500,
 	},
+	"bulbul:v4-flash": {
+		max_characters: 2500,
+		max_characters_streaming: 3500,
+		max_characters_websocket: 2500,
+	},
 } as const satisfies Record<
 	SpeechModelId,
 	{
