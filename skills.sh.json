@@ -1,0 +1,31 @@
+{
+	"$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+	"notGrouped": "bottom",
+	"groupings": [
+		{
+			"title": "Getting Started",
+			"description": "Provider setup, model constructors, and the sarvam-ai-sdk/info export.",
+			"skills": ["sarvam-ai-sdk"]
+		},
+		{
+			"title": "Chat & Text",
+			"description": "Text generation, streaming, tool calling, and structured output with Sarvam chat models.",
+			"skills": ["sarvam-ai-sdk-chat", "sarvam-ai-sdk-tools"]
+		},
+		{
+			"title": "Speech",
+			"description": "Speech-to-text (Saaras) and text-to-speech (Bulbul) through the AI SDK.",
+			"skills": ["sarvam-ai-sdk-speech"]
+		},
+		{
+			"title": "Translation & Language",
+			"description": "Translation, transliteration, and language identification.",
+			"skills": ["sarvam-ai-sdk-text"]
+		},
+		{
+			"title": "Agents",
+			"description": "Durable Eve agents backed by Sarvam models.",
+			"skills": ["sarvam-ai-sdk-eve"]
+		}
+	]
+}
