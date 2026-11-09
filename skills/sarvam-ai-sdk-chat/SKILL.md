@@ -53,6 +53,8 @@ for await (const part of result.textStream) process.stdout.write(part);
 
 Streaming works for chat only. Reasoning tokens arrive as `reasoning` parts before the answer text; text deltas are grouped under a single `text-0` id.
 
+Streaming token usage is read from top-level `usage`, including a final chunk with `choices: []`. Legacy `x_sarvam.usage` is accepted as a fallback. Missing usage stays unknown; do not treat it as zero cost.
+
 ## Settings
 
 ```ts

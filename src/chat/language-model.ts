@@ -370,16 +370,17 @@ export class SarvamChatLanguageModel implements LanguageModelV4 {
 							}
 						}
 
-						if (value.x_sarvam?.usage != null) {
+						const chunkUsage = value.usage ?? value.x_sarvam?.usage;
+						if (chunkUsage != null) {
 							usage = {
 								inputTokens: {
-									total: value.x_sarvam.usage.prompt_tokens ?? undefined,
+									total: chunkUsage.prompt_tokens ?? undefined,
 									noCache: undefined,
 									cacheRead: undefined,
 									cacheWrite: undefined,
 								},
 								outputTokens: {
-									total: value.x_sarvam.usage.completion_tokens ?? undefined,
+									total: chunkUsage.completion_tokens ?? undefined,
 									text: undefined,
 									reasoning: undefined,
 								},
